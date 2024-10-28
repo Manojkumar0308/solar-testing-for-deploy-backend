@@ -13,7 +13,7 @@ const plantMetricSchema = new mongoose.Schema({
     max_output_current:{type:Number,required:true},
     max_output_power:{type:Number,required:true},
   
-    //General Plant information
+    //General Plant 0000000000000 
     total_capacity_kw:{type:Number,required:true},
     installation_date:{type:Date,required:true},
     status:{type:String,required:true,default:"active",

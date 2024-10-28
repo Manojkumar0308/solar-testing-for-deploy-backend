@@ -1,5 +1,7 @@
 const express = require ("express");
 const dotenv = require("dotenv");
+const {validateAndSendVerificationEmail} = require('./middlewares/errorHandler');
+const authRoutes = require("./routes/userRoutes");
 const socketIo = require('socket.io');
 const http = require('http');
 const bodyParser = require("body-parser");
@@ -19,7 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //routes
+app.use('api/user',authRoutes);
 
+// Error handling middlewares
+app.use(validateAndSendVerificationEmail);
 initSocket(server);
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`);
