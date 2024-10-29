@@ -21,10 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //routes
-app.use('api/user',authRoutes);
+app.use('/api/user',authRoutes);
 
 // Error handling middlewares
-app.use(validateAndSendVerificationEmail);
+
 initSocket(server);
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`);

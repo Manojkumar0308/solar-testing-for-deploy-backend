@@ -1,27 +1,30 @@
 const User = require("../models/userModel");
 const verificationStore = require('../utils/verificationstore'); // Import the verification store
-
+const asyncHandler = require('express-async-handler');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const {emitLogin}= require('../utils/socket')
 //verify email
-const verifyEmail = async (req, res) => {
+const verifyEmail = asyncHandler(async (req, res) => {
     try {
         const { email, token } = req.body;
 
         // Retrieve the stored verification details
-        const storedData = verificationStore.get(email);
-        console.log(storedData.first_name)
+        const storedData =await verificationStore.get(email);
+        console.log(`storedData.first_name: ${storedData.first_name}`);
         if (!storedData) {
-            return res.status(400).json({
-                status: 'fail',
-                message: 'Verification details not found'
-            });
+            console.log("Stored data not found for email:", email);
+            return res.status(400).json({ status: 'fail', message: 'Verification details not found' });
+        } else {
+            console.log(`Found stored data for email ${email}:`, storedData);
         }
-
+        
         // Check if the token matches and hasn't expired
         const isTokenValid = storedData.verificationToken === token;
         const isTokenExpired = storedData.tokenExpiry < Date.now();
 
         if (isTokenExpired) {
-            return res.status(400).json({
+            return res.status(401).json({
                 status: 'fail',
                 message: 'Verification token has expired'
             });
@@ -61,22 +64,34 @@ const verifyEmail = async (req, res) => {
             error: error.message
         });
     }
-};
+});
 
 
-const registerUser = async (req, res) => {
-    const { first_name, last_name, email, password,mobile,role} = req.body;
-    const user = await User.create({
-        first_name,
-        last_name,
-        email,
-        password,
-        mobile,
-        role
-    });
-    res.status(201).json({
-        status: "success",
-        user,
-    });
-};
-module.exports = {registerUser,verifyEmail};
+const loginController = asyncHandler(async (req, res) => {
+    try {    
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        console.log(`user: ${user}`);
+        if (!user) {
+            return res.status(401).json({ status: 'fail', message: 'User not found' });
+        }
+        if (!user.isVerified) {
+            return res.status(401).json({ status: 'fail', message: 'User is not verified' });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ status: 'fail', message: 'Invalid password' });
+        }        
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '2m' });
+         // Remove password from user object before sending response
+         delete user.password;
+       
+         emitLogin( { id: user._id, email: user.email });
+        res.status(200).json({ status: 'success', message: 'User logged in successfully', user, token });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });        
+    }
+});
+
+
+module.exports = {verifyEmail,loginController};

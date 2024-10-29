@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerUser, verifyEmail } = require("../controller/userController");
+const { loginController,verifyEmail } = require('../controller/userController');
 const { validateAndSendVerificationEmail } = require('../middlewares/errorHandler');
 const routes = express.Router();
 // Endpoint to send verification email
@@ -11,4 +11,5 @@ routes.post('/send-verification', validateAndSendVerificationEmail, (req, res) =
 });
 
 routes.post('/verify-email', verifyEmail);
+routes.post('/login',loginController)
 module.exports = routes
