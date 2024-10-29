@@ -4,7 +4,7 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {emitLogin}= require('../utils/socket')
-//verify email
+//verify email 
 const verifyEmail = asyncHandler(async (req, res) => {
     try {
         const { email, token } = req.body;

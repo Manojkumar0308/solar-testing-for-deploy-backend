@@ -5,7 +5,7 @@ const initSocket = (server) =>{
    io = socketIo(server);
 
    io.on('connection',(socket)=>{
-    console.log('New client connected',socket.id);
+    console.log('New client connected',socket.id); 
      // Listen for login event
      socket.on('login', (data) => {
         console.log(`User logged in: ${JSON.stringify(data)}`);
