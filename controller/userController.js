@@ -67,11 +67,11 @@ const verifyEmail = asyncHandler(async (req, res) => {
 });
 
 
-const loginController = asyncHandler(async (req, res) => {
+const loginController = asyncHandler(async (req, res,) => {
     try {    
         const { email, password } = req.body;
         const user = await User.findOne({ email });
-        console.log(`user: ${user}`);
+       
         if (!user) {
             return res.status(401).json({ status: 'fail', message: 'User not found' });
         }
@@ -86,7 +86,7 @@ const loginController = asyncHandler(async (req, res) => {
          // Remove password from user object before sending response
          delete user.password;
        
-         emitLogin( { id: user._id, email: user.email });
+    
         res.status(200).json({ status: 'success', message: 'User logged in successfully', user, token });
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });        
