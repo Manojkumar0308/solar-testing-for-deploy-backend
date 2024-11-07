@@ -16,12 +16,20 @@ const initSocket = (server) =>{
         socket.on('login', (userDetails) => {
             console.log(`User logged in: ${userDetails.email} with socket ID: ${socket.id}`);
         });
-        socket.on('logout', () => {
-            console.log(`User logged out: ${socket.id}`);
-            socket.disconnect(); // Disconnect the socket on logout
+        socket.on('logout', (userDetails) => {
+            console.log(`User logged out: ${userDetails.email} with socket ID: ${socket.id}`);
+            socket?.disconnect(); // Disconnect the socket on logout
+            socket=null;
           });
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
+        });
+        socket.on('send-sensor-data', (data) => {
+            console.log('Sensor data received:', data);
+        });
+
+        socket.on('send-inverter-data', (data) => {
+            console.log('Sensor data received:', data);
         });
     });
     return io;
