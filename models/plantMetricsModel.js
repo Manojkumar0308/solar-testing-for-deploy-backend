@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const plantMetricSchema = new mongoose.Schema({
-    plant_id:{type:mongoose.Schema.Types.ObjectId,ref:"SolarPlantSchema"},
+    plant_id:{type:String,ref:"SolarPlantSchema"},
     // Technical specifications
-    number_of_panels:{type:Number,required:true},
+    // number_of_panels:{type:Number,required:true},
     number_of_inverters:{type:Number,required:true},
    panel_type:{type:String,required:true,
     enum: ["monocrystalline", "polycrystalline",'thin-film']},
@@ -15,7 +15,7 @@ const plantMetricSchema = new mongoose.Schema({
   
     //General Plant 0000000000000 
     total_capacity_kw:{type:Number,required:true},
-    installation_date:{type:Date,required:true},
+    installation_date:{type:Date},
     status:{type:String,required:true,default:"active",
         enum:["active","inactive"]
     },

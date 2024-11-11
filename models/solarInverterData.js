@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const solarInverterDataSchema = new mongoose.Schema({
-    plant_id:{type:mongoose.Schema.Types.ObjectId,ref:"SolarPlantSchema"},
-    inverter_id:{type:mongoose.Schema.Types.ObjectId,ref:"SolarInverterSchema"},
-   
+    plant_id:{type:String,ref:"SolarPlantSchema"},
+    inverter_id:{type:String,ref:"SolarInverterSchema"},
+    customer_id:{type:String,ref:"CustomerSchema"},
     // Real-time metrics from the inverter
     power_output:{type:Number,required:true},     //Power output in watts
     total_energy_generated:{type:Number,required:true},     //Total energy generated in kWh

@@ -2,6 +2,10 @@ const express = require ("express");
 const dotenv = require("dotenv");
 const {validateAndSendVerificationEmail} = require('./middlewares/errorHandler');
 const authRoutes = require("./routes/userRoutes");
+const plantRoutes = require('./routes/create-plant-route');
+const inverterRoutes = require('./routes/create-inverter-route');
+const getPlantDetailRoute = require('./routes/get-plant-detail-route')
+const inverterDataRoutes = require('./routes/send-inverter-data-routes');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const http = require('http');
@@ -30,6 +34,11 @@ app.use(bodyParser.json());
 
 //routes
 app.use('/api/user',authRoutes);
+app.use('/api/plants',plantRoutes);
+app.use('/api/inverters',inverterRoutes);
+app.use('/api/get-plant-detail',getPlantDetailRoute);
+app.use('/api/inverters',inverterDataRoutes);
+
 
 // Error handling middlewares
 
