@@ -1,5 +1,6 @@
 const express = require("express");
 const inverterData = require('../controller/send-inverter-data');
+const {authMiddleware} = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 

@@ -3,7 +3,8 @@ const verificationStore = require('../utils/verificationstore'); // Import the v
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {emitLogin}= require('../utils/socket')
+const { emitLogin,emitLogout } = require('../utils/socket');
+const { emit } = require("nodemon");
 //verify email 
 const verifyEmail = asyncHandler(async (req, res) => {
     try {
@@ -86,7 +87,7 @@ const loginController = asyncHandler(async (req, res,) => {
          // Remove password from user object before sending response
          delete user.password;
        
-    
+        emitLogin({user_id:user._id,user_email:user.email,user_role:user.role});
         res.status(200).json({ status: 'success', message: 'User logged in successfully', user, token });
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });        
@@ -106,7 +107,7 @@ const logoutController = asyncHandler(async (req, res) => {
       console.log('for logout method userId:', userId);
       // Emit a logout event to the socket
       if (userId) {
-     
+    
         res.status(200).json({ status: 'success', message: 'User logged out successfully' ,user:req.user});
       } else {
         console.log('userId not found', userId);
