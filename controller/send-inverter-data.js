@@ -1,4 +1,4 @@
-const InverterData  = require('../models/solarInverterData');
+const InverterData  = require('../models/solarInverterDataModel');
 const {emitInverterData} = require('../utils/socket');
 
 // Controller function to get distinct inverters by plant ID

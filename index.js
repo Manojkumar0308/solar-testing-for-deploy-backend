@@ -6,6 +6,7 @@ const plantRoutes = require('./routes/create-plant-route');
 const inverterRoutes = require('./routes/create-inverter-route');
 const getPlantDetailRoute = require('./routes/get-plant-detail-route')
 const inverterDataRoutes = require('./routes/send-inverter-data-routes');
+const sensorDataRoutes = require('./routes/send-sensor-data-route');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const http = require('http');
@@ -18,7 +19,7 @@ dbConnect();
 
 const PORT= process.env.PORT || 5000;
 const server = http.createServer(app);
-const io = socketIo(server)
+// const io = socketIo(server)
 const corsOptions = {
     origin: 'http://localhost:5173', // Allow requests from your Vite app
     methods: ["GET", "POST"],
@@ -38,6 +39,7 @@ app.use('/api/plants',plantRoutes);
 app.use('/api/inverters',inverterRoutes);
 app.use('/api/get-plant-detail',getPlantDetailRoute);
 app.use('/api/inverters',inverterDataRoutes);
+app.use('/api/sensors',sensorDataRoutes);
 
 
 // Error handling middlewares
