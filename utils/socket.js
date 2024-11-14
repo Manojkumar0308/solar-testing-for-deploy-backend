@@ -61,7 +61,7 @@ const emitLogin = (userdata) => {
 
 const emitNotification = (data) => {
   if (io) {
-    io.emit('notification', data);
+    io.emit('admin-send-notification', data);
   }
 };
 
