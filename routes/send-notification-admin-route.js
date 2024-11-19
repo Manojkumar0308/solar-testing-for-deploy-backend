@@ -3,5 +3,5 @@ const {authMiddleware} = require('../middlewares/authMiddleware');
 const express = require("express");
 const routes = express.Router();
 routes.post('/send-notification',authMiddleware, sendNotification);
-routes.get('/get-notification/:customer_id',getNotifications);
+routes.post('/get-notification',authMiddleware,getNotifications);
 module.exports = routes
