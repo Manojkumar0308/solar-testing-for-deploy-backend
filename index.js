@@ -8,6 +8,7 @@ const getPlantDetailRoute = require('./routes/get-plant-detail-route')
 const inverterDataRoutes = require('./routes/send-inverter-data-routes');
 const sensorDataRoutes = require('./routes/send-sensor-data-route');
 const adminNotificationRoutes = require('./routes/send-notification-admin-route');
+const userPlantRoutes = require('./routes/user-plant-route');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const http = require('http');
@@ -42,6 +43,7 @@ app.use('/api/get-plant-detail',getPlantDetailRoute);
 app.use('/api/inverters',inverterDataRoutes);
 app.use('/api/sensors',sensorDataRoutes);
 app.use('/api/admin',adminNotificationRoutes);
+app.use('/api/admin',userPlantRoutes);
 // app.use('/api/user',adminNotificationRoutes);
 
 
