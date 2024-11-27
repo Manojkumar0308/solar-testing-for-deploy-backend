@@ -52,7 +52,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
         // Remove the verification details from the store
         verificationStore.delete(email);
 
-        res.status(201).json({
+        res.status(200).json({
             status: 'success',
             message: 'Email verified and user created successfully',
             user: newUser
