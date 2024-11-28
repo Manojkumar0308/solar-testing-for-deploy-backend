@@ -3,6 +3,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const User = require('../models/userModel'); // Import the User model
 const { body, validationResult } = require('express-validator');
+const validator = require('validator');
 const verificationStore = require('../utils/verificationstore'); // Import the verification store
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -35,6 +36,14 @@ const validateAndSendVerificationEmail = [
         }
                    
         const { email, password, first_name, last_name, mobile,role } = req.body;
+
+          // 1. Validate email format
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Invalid email address format'
+        });
+    }
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });

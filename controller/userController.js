@@ -117,4 +117,14 @@ const logoutController = asyncHandler(async (req, res) => {
       res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
   });
-module.exports = {verifyEmail,loginController,logoutController};
+
+  const getAllUsers = asyncHandler(async (req, res) => {
+    try {
+      const users = await User.find();
+      res.status(200).json({ status: 'success', message: 'Users fetched successfully', users });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: 'error', message: 'Internal server error' });
+    }
+  })
+module.exports = {verifyEmail,loginController,logoutController,getAllUsers};

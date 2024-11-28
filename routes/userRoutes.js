@@ -1,5 +1,5 @@
 const express = require("express");
-const { loginController,verifyEmail,logoutController} = require('../controller/userController');
+const { loginController,verifyEmail,logoutController,getAllUsers} = require('../controller/userController');
 const { validateAndSendVerificationEmail } = require('../middlewares/errorHandler');
 const {authMiddleware} = require('../middlewares/authMiddleware');
 const routes = express.Router();
@@ -14,4 +14,5 @@ routes.post('/send-verification', validateAndSendVerificationEmail, (req, res) =
 routes.post('/verify-email', verifyEmail);
 routes.post('/login',loginController) 
 routes.post('/logout',authMiddleware,logoutController)
+routes.get('/get-user',getAllUsers)
 module.exports = routes
