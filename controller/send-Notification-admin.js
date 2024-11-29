@@ -1,27 +1,57 @@
 const NotificationSchema = require("../models/notificationModel");
 const {emitNotification} = require('../utils/socket');
 
-const sendNotification = async (req, res) => {
-    try {
-      const { customer_id, title, message } = req.body;
-      const newNotification = new NotificationSchema({
-        customer_id,
-        title,
-        message,
-      });
-      const savedNotification = await newNotification.save();
-      if(savedNotification){
-        emitNotification(savedNotification);
-        res.status(200).json({ message: "Notification added successfully", data: savedNotification });
-      }
+// const sendNotification = async (req, res) => {
+//     try {
+//       const { customer_id, title, message } = req.body;
+//       const newNotification = new NotificationSchema({
+//         customer_id,
+//         title,
+//         message,
+//       });
+//       const savedNotification = await newNotification.save();
+//       if(savedNotification){
+//         emitNotification(savedNotification);
+//         res.status(200).json({ message: "Notification added successfully", data: savedNotification });
+//       }
      
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error adding notification", error: err.message });
-    }
-  };
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ message: "Error adding notification", error: err.message });
+//     }
+//   };
  
+const sendNotification = async (req, res) => {
+  try {
+    const { customer_ids, title, message } = req.body; // Accept an array of customer_ids
+    if (!Array.isArray(customer_ids) || customer_ids.length === 0) {
+      return res.status(400).json({ message: "customer_ids must be a non-empty array" });
+    }
 
+    // Prepare notifications for each customer
+    const notifications = customer_ids.map((customer_id) => ({
+      customer_id,
+      title,
+      message,
+    }));
+
+    // Insert multiple notifications into the database
+    const savedNotifications = await NotificationSchema.insertMany(notifications);
+
+    // Emit notifications for each customer
+    savedNotifications.forEach((notification) => {
+      emitNotification(notification); // Replace with your emit logic
+    });
+
+    res.status(200).json({
+      message: "Notifications sent successfully",
+      data: savedNotifications,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error sending notifications", error: err.message });
+  }
+};
 const getNotifications = async (req, res) => {
   const customer_id = req.user._id; // Assuming customer_id is in req.user from middleware
   console.log('customer_id:', customer_id);
