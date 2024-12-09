@@ -23,7 +23,7 @@ const PORT= process.env.PORT || 5000;
 const server = http.createServer(app);
 // const io = socketIo(server)
 const corsOptions = {
-    origin: 'http://localhost:5173', // Allow requests from your Vite app
+    origin: 'http://192.168.1.238:5173', // Allow requests from your Vite app
     methods: ["GET", "POST"],
     allowedHeaders: ['Content-Type', 'Authorization'],
    
