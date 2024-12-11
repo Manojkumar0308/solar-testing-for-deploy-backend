@@ -19,7 +19,7 @@ try {
        res.status(401).json({message:'Unauthorized, token missing'});
     } 
 } catch (error) {
-    res.status(500).json({message:'Not authorized, token failed with 500 serer error'});
+    res.status(500).json({message:'Not authorized, token failed with 500 server error'});
 }      
     }else{
         res.status(401);
