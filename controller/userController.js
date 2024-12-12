@@ -83,7 +83,7 @@ const loginController = asyncHandler(async (req, res,) => {
         if (!isPasswordValid) {
             return res.status(401).json({ status: 'fail', message: 'Invalid password' });
         }        
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
          // Remove password from user object before sending response
          delete user.password;
        
