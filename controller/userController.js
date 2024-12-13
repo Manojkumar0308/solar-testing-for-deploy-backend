@@ -127,4 +127,39 @@ const logoutController = asyncHandler(async (req, res) => {
       res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
   })
-module.exports = {verifyEmail,loginController,logoutController,getAllUsers};
+
+
+  const userVerification = asyncHandler(async (req, res) => {
+      try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if(!user){
+            return res.status(401).json({ status: 'fail', message: 'User not found' });
+        }
+      
+    else{
+            return res.status(200).json({ status: 'success', message: 'User found' });
+        }
+       
+      } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });
+      }
+  });
+
+
+  const changePassword = asyncHandler(async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(401).json({ status: 'fail', message: 'User not found' });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+      await user.save();
+      res.status(200).json({ status: 'success', message: 'Password changed successfully' });
+    } catch (error) {
+      res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });
+    }
+  })
+module.exports = {verifyEmail,loginController,logoutController,getAllUsers,userVerification,changePassword};
