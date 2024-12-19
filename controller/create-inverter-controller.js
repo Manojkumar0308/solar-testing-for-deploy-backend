@@ -20,14 +20,32 @@ exports.createInverter = async (req, res) => {
   
   // Get all inverters
   exports.getAllInverters = async (req, res) => {
-    try {
-      const inverters = await inverterModel.find().populate("plant_id", "plant_name capacity_kw"); // Populating the plant data
-      res.status(200).json({ message: "Inverters fetched successfully", data: inverters });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error fetching inverters", error: err.message });
+    const { plant_id } = req.body;
+try{
+    // Check if plant_id is provided
+    if (!plant_id) {
+      return res.status(400).json({ message: "plant_id is required in the body" });
     }
-  };
+
+    
+    // Query the inverterModel to find inverters related to the given plant_id
+    const inverters = await inverterModel
+      .find({ plant_id: plant_id })  // Querying with string plant_id
+      .populate("plant_id", "plant_name ,capacity_kw"); // Populate plant data
+
+
+    // If no inverters are found, return a 404 response
+    if (inverters.length === 0) {
+      return res.status(404).json({ message: "No inverters found for the given plant_id" });
+    }
+
+    // Return the inverters data
+    res.status(200).json({ message: "Inverters fetched successfully", data: inverters });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching inverters", error: err.message });
+  }
+};
   
   // Get a single inverter by ID
   exports.getInverterById = async (req, res) => {

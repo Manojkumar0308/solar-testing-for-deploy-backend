@@ -9,6 +9,7 @@ const inverterDataRoutes = require('./routes/send-inverter-data-routes');
 const sensorDataRoutes = require('./routes/send-sensor-data-route');
 const adminNotificationRoutes = require('./routes/send-notification-admin-route');
 const userPlantRoutes = require('./routes/user-plant-route');
+const getPlantsByCustomerRoute = require('./routes/get-plant-by-user');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const http = require('http');
@@ -23,7 +24,7 @@ const PORT= process.env.PORT || 5000;
 const server = http.createServer(app);
 // const io = socketIo(server)
 const corsOptions = {
-    origin: 'http://192.168.1.238:5173', // Allow requests from your Vite app
+    origin: 'http://192.168.1.49:5173', // Allow requests from your Vite app
     methods: ["GET", "POST"],
     allowedHeaders: ['Content-Type', 'Authorization'],
    
@@ -38,12 +39,14 @@ app.use(bodyParser.json());
 //routes
 app.use('/api/user',authRoutes);
 app.use('/api/plants',plantRoutes);
+app.use('/api/user',getPlantsByCustomerRoute)
 app.use('/api/inverters',inverterRoutes);
 app.use('/api/get-plant-detail',getPlantDetailRoute);
 app.use('/api/inverters',inverterDataRoutes);
 app.use('/api/sensors',sensorDataRoutes);
 app.use('/api/admin',adminNotificationRoutes);
 app.use('/api/admin',userPlantRoutes);
+
 // app.use('/api/user',adminNotificationRoutes);
 
 
