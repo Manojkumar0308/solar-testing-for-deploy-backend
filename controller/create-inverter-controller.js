@@ -24,7 +24,7 @@ exports.createInverter = async (req, res) => {
 try{
     // Check if plant_id is provided
     if (!plant_id) {
-      return res.status(400).json({ message: "plant_id is required in the body" });
+      return res.status(400).json({ message: "plant_id is required" });
     }
 
     

@@ -3,4 +3,4 @@ const getFullPlantDetails = require('../controller/get-plant-detail');
 const routes = express.Router();
 routes.get("/plant/:plant_id",getFullPlantDetails.getFullPlantDetails)
 
-module.exports = routes;
+module.exports = routes; 

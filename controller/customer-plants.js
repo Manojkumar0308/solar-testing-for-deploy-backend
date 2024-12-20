@@ -8,6 +8,8 @@ exports.getPlantsByCustomer = async (req, res) => {
       // Check if customer_id is provided
       if (!customer_id) {
         return res.status(400).json({ message: "customer_id is required" });
+      }else{
+        
       }
   
       // Query the SolarPlant collection to find plants associated with the customer_id

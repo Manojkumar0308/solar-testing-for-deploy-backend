@@ -7,4 +7,4 @@ routes.get('/get-inverter/:id', inverterController.getInverterById);
 routes.post('/get-all-inverter', inverterController.getAllInverters);
 routes.put('/update-inverter/:id', inverterController.updateInverter);
 routes.delete('/delete-inverter/:id', inverterController.deleteInverter);
-module.exports = routes
+module.exports = routes 

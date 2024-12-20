@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const getPlantsByCustomerController = require('../controller/customer-plants');
 const routes = express.Router();
 

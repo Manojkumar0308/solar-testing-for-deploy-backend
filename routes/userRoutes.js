@@ -11,6 +11,7 @@ routes.post('/send-verification', validateAndSendVerificationEmail, (req, res) =
     });
 });
 
+
 routes.post('/verify-email', verifyEmail);
 routes.post('/login',loginController) 
 routes.post('/logout',authMiddleware,logoutController)
