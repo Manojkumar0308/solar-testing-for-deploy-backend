@@ -42,7 +42,7 @@ app.use('/api/plants',plantRoutes);
 app.use('/api/user',getPlantsByCustomerRoute)
 app.use('/api/inverters',inverterRoutes);
 app.use('/api/get-plant-detail',getPlantDetailRoute);
-app.use('/api/inverters',inverterDataRoutes);
+app.use('/api/inverter',inverterDataRoutes);
 app.use('/api/sensors',sensorDataRoutes);
 app.use('/api/admin',adminNotificationRoutes);
 app.use('/api/admin',userPlantRoutes);
