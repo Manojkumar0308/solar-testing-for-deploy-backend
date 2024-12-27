@@ -1,4 +1,4 @@
-const express = require ("express");
+const express = require("express");
 const dotenv = require("dotenv");
 const {validateAndSendVerificationEmail} = require('./middlewares/errorHandler');
 const authRoutes = require("./routes/userRoutes");

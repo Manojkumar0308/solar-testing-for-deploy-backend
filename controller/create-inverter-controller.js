@@ -33,10 +33,11 @@ try{
       .find({ plant_id: plant_id })  // Querying with string plant_id
       .populate("plant_id", "plant_name ,capacity_kw"); // Populate plant data
 
-
+console.log('inverters--->>>',inverters);
     // If no inverters are found, return a 404 response
-    if (inverters.length === 0) {
-      return res.status(404).json({ message: "No inverters found for the given plant_id" });
+    if (!Array.isArray(inverters) || inverters.length === 0) {
+      console.log(`No inverters found for plant_id: ${plant_id}`);
+      return res.status(200).json({ message: `No inverters found for plant_id: ${plant_id}` });
     }
 
     // Return the inverters data
