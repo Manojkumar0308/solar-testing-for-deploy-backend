@@ -8,3 +8,4 @@ routes.get('/get-all-plant', createPlant.getAllSolarPlants);
 routes.put('/update-plant', createPlant.updateSolarPlant);
 routes.delete('/delete-plant', createPlant.deleteSolarPlant);
 module.exports = routes
+

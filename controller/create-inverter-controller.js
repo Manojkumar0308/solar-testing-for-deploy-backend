@@ -20,31 +20,56 @@ exports.createInverter = async (req, res) => {
   
   // Get all inverters
   exports.getAllInverters = async (req, res) => {
-    try {
-      const inverters = await inverterModel.find().populate("plant_id", "plant_name capacity_kw"); // Populating the plant data
-      res.status(200).json({ message: "Inverters fetched successfully", data: inverters });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error fetching inverters", error: err.message });
+    const { plant_id } = req.body;
+try{
+    // Check if plant_id is provided
+    if (!plant_id) {
+      return res.status(400).json({ message: "plant_id is required" });
     }
-  };
+
+    
+    // Query the inverterModel to find inverters related to the given plant_id
+    const inverters = await inverterModel
+      .find({ plant_id: plant_id })  // Querying with string plant_id
+      .populate("plant_id", "plant_name ,capacity_kw"); // Populate plant data
+
+console.log('inverters--->>>',inverters);
+    // If no inverters are found, return a 404 response
+    if (!Array.isArray(inverters) || inverters.length === 0) {
+      console.log(`No inverters found for plant_id: ${plant_id}`);
+      return res.status(200).json({ message: `No inverters found for plant_id: ${plant_id}` });
+    }
+
+    // Return the inverters data
+    res.status(200).json({ message: "Inverters fetched successfully", data: inverters });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching inverters", error: err.message });
+  }
+};
   
   // Get a single inverter by ID
   exports.getInverterById = async (req, res) => {
+    console.log('hhkhggkiyhi')
+    const { inverter_id } = req.body;  // Extract inverter_id from the body
+    console.log('inverter_id', inverter_id);  // Check if it's received correctly
+    
     try {
-      const { id } = req.params;
-      const inverter = await inverterModel.findById(id).populate("plant_id", "plant_name capacity_kw");
-  
-      if (!inverter) {
-        return res.status(404).json({ message: "Inverter not found" });
-      }
-  
-      res.status(200).json({ message: "Inverter fetched successfully", data: inverter });
+        // Find inverter by the provided inverter_id
+        const inverter = await inverterModel.findOne({ inverter_id: inverter_id });
+
+        if (!inverter) {
+            return res.status(404).json({ message: "Inverter not found" });
+        }
+
+        // Return the found inverter
+        res.status(200).json({ message: "Inverter fetched successfully", data: inverter });
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error fetching inverter", error: err.message });
+        console.error(err);
+        res.status(500).json({ message: "Error fetching inverter", error: err.message });
     }
-  };
+};
+
   
   // Update an inverter by ID
   exports.updateInverter = async (req, res) => {

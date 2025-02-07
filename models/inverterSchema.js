@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const inverterSchema = new mongoose.Schema({
-    plant_id:{type:String,required:true,ref:"SolarPlantSchema"},
+    plant_id:{type:String,required:true},
     inverter_name:{type:String,required:true},
     inverter_id:{type:String,required:true},
     capacity_kw:{type:Number,required:true},
