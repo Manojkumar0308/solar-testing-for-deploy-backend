@@ -23,15 +23,15 @@ dbConnect();
 const PORT= process.env.PORT || 5000;
 const server = http.createServer(app);
 // const io = socketIo(server)
-const corsOptions = {
-    origin: process.env.FRONTEND_URL,   // Allow requests from your Vite app
-    methods: ["GET", "POST","PUT","DELETE"],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+// const corsOptions = {
+//     origin: process.env.FRONTEND_URL,   // Allow requests from your Vite app
+//     methods: ["GET", "POST","PUT","DELETE"],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
    
    
-};
+// };
 
-app.use(cors(corsOptions)); // Use CORS middleware before your routes
+app.use(cors()); // Use CORS middleware before your routes
 app.use(express.json());  
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
