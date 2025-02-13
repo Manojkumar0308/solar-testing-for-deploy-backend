@@ -1,4 +1,4 @@
-      
+require('dotenv').config(); // Load environment variables from .env 
 const socketIo = require('socket.io');
 
 let io;
@@ -12,7 +12,7 @@ const initSocket = (server) => {
   }
     io = socketIo(server, {
       cors: {
-        origin: 'http://192.168.1.238:5173',
+        origin: process.env.FRONTEND_URL,
         methods: ["GET", "POST"],
         allowedHeaders: ['Content-Type', 'Authorization'],
       },
