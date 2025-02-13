@@ -138,7 +138,7 @@ const logoutController = asyncHandler(async (req, res) => {
         }
       
     else{
-            return res.status(200).json({ status: 'success', message: 'User found' });
+            return res.status(200).json({ status: 'success', message: 'User found',user:user });
         }
        
       } catch (error) {
@@ -149,17 +149,45 @@ const logoutController = asyncHandler(async (req, res) => {
 
   const changePassword = asyncHandler(async (req, res) => {
     try {
-      const { email, password } = req.body;
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(401).json({ status: 'fail', message: 'User not found' });
+      const { password, confirmPassword } = req.body;
+  
+      // Check if both passwords are provided
+      if (!password || !confirmPassword) {
+        return res.status(400).json({ status: 'fail', message: 'Please provide both password and confirmPassword' });
       }
+  
+      // Ensure the new password and confirm password match
+      if (password !== confirmPassword) {
+        return res.status(400).json({ status: 'fail', message: 'Password and confirm password do not match' });
+      }
+  
+      // Validate the strength of the new password (minimum 6 characters, includes number and special character)
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+      if (!passwordRegex.test(password)) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Password must be at least 6 characters long, contain at least one number and one special character'
+        });
+      }
+  
+      // Hash the new password before saving it
       const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Find the user and update their password
+      const user = await User.findById(req.user._id);  // Assuming you are using authMiddleware to set the user in req.user
+      if (!user) {
+        return res.status(404).json({ status: 'fail', message: 'User not found' });
+      }
+  
+      // Update the password in the database
       user.password = hashedPassword;
       await user.save();
+  
+      // Respond with success message
       res.status(200).json({ status: 'success', message: 'Password changed successfully' });
     } catch (error) {
       res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });
     }
-  })
+  });
+  
 module.exports = {verifyEmail,loginController,logoutController,getAllUsers,userVerification,changePassword};
