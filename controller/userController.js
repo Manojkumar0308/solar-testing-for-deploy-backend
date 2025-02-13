@@ -138,7 +138,7 @@ const logoutController = asyncHandler(async (req, res) => {
         }
       
     else{
-            return res.status(200).json({ status: 'success', message: 'User found',user:user });
+            return res.status(200).json({ status: 'success', message: 'User found',user:user.email });
         }
        
       } catch (error) {
