@@ -71,6 +71,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
 const loginController = asyncHandler(async (req, res,) => {
     try {    
         const { email, password } = req.body;
+        console.log(req.body)
         const user = await User.findOne({ email });
        
         if (!user) {
@@ -79,7 +80,11 @@ const loginController = asyncHandler(async (req, res,) => {
         if (!user.isVerified) {
             return res.status(401).json({ status: 'fail', message: 'User is not verified' });
         }
+        console.log("Stored Password in DB:", user.password); // Debugging
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log("Password Match Status:", isPasswordValid); // Debugging
+       
         if (!isPasswordValid) {
             return res.status(401).json({ status: 'fail', message: 'Invalid password' });
         }        
@@ -149,46 +154,40 @@ const logoutController = asyncHandler(async (req, res) => {
 
   const changePassword = asyncHandler(async (req, res) => {
     try {
-      const { email, password, confirmPassword } = req.body;
-  
-      // Check if both password and confirmPassword are provided
-      if (!password || !confirmPassword) {
-        return res.status(400).json({ status: 'fail', message: 'Please provide both password and confirmPassword' });
-      }
-  
-      // Ensure the new password and confirm password match
-      if (password !== confirmPassword) {
-        return res.status(400).json({ status: 'fail', message: 'Password and confirm password do not match' });
-      }
-  
-      // Validate the strength of the new password (minimum 6 characters, includes number and special character)
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
-      if (!passwordRegex.test(password)) {
-        return res.status(400).json({
-          status: 'fail',
-          message: 'Password must be at least 6 characters long, contain at least one number and one special character'
-        });
-      }
-  
-      // Hash the new password before saving it
-      const hashedPassword = await bcrypt.hash(password, 10);
-  
-      // Find the user by email
-      const user = await User.findOne({ email });  // Find user by email
-      if (!user) {
-        return res.status(404).json({ status: 'fail', message: 'User not found' });
-      }
-  
-      // Update the password in the database
-      user.password = hashedPassword;
-      await user.save();
-  
-      // Respond with success message
-      res.status(200).json({ status: 'success', message: 'Password changed successfully' });
+        const { email, password, confirmPassword } = req.body;
+
+        if (!password || !confirmPassword) {
+            return res.status(400).json({ status: 'fail', message: 'Please provide both password and confirmPassword' });
+        }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ status: 'fail', message: 'Password and confirm password do not match.' });
+        }
+
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+        if (!passwordRegex.test(password)) {
+            return res.status(400).json({
+                status: 'fail',
+                message: 'Password must be at least 6 characters long, contain at least one number and one special character.'
+            });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ status: 'fail', message: 'User not found.' });
+        }
+
+        // Do not hash here; assign the plain password.
+        user.password = password;
+        await user.save();
+
+        res.status(200).json({ status: 'success', message: 'Password changed successfully.' });
     } catch (error) {
-      res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });
+        console.error("Error in changePassword:", error);
+        res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });
     }
-  });
-  
+});
+
+
   
 module.exports = {verifyEmail,loginController,logoutController,getAllUsers,userVerification,changePassword};

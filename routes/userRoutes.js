@@ -17,5 +17,5 @@ routes.post('/login',loginController)
 routes.post('/logout',authMiddleware,logoutController)
 routes.get('/get-user',getAllUsers)
 routes.post('/get-verify-user',userVerification)
-routes.post('/change-password',changePassword)
+routes.put('/change-password',changePassword)
 module.exports = routes
