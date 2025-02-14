@@ -149,9 +149,9 @@ const logoutController = asyncHandler(async (req, res) => {
 
   const changePassword = asyncHandler(async (req, res) => {
     try {
-      const { password, confirmPassword } = req.body;
+      const { email, password, confirmPassword } = req.body;
   
-      // Check if both passwords are provided
+      // Check if both password and confirmPassword are provided
       if (!password || !confirmPassword) {
         return res.status(400).json({ status: 'fail', message: 'Please provide both password and confirmPassword' });
       }
@@ -173,8 +173,8 @@ const logoutController = asyncHandler(async (req, res) => {
       // Hash the new password before saving it
       const hashedPassword = await bcrypt.hash(password, 10);
   
-      // Find the user and update their password
-      const user = await User.findById(req.user._id);  // Assuming you are using authMiddleware to set the user in req.user
+      // Find the user by email
+      const user = await User.findOne({ email });  // Find user by email
       if (!user) {
         return res.status(404).json({ status: 'fail', message: 'User not found' });
       }
@@ -189,5 +189,6 @@ const logoutController = asyncHandler(async (req, res) => {
       res.status(500).json({ status: 'error', message: 'Internal server error', error: error.message });
     }
   });
+  
   
 module.exports = {verifyEmail,loginController,logoutController,getAllUsers,userVerification,changePassword};
