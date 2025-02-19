@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     port: 465,
     secure: true, 
-    // requireTLS: true,
+    requireTLS: true,
     auth: {
         user: process.env.SMTP_MAIL, // Your email address
         pass: process.env.SMTP_PASS   // Your email password or app-specific password
