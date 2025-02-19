@@ -58,7 +58,7 @@ const validateAndSendVerificationEmail = [
         const verificationTokenExpires = Date.now() + 5 * 60 * 1000; // 5 minutes
 
         const mailOptions = {
-            from: 'manojku0308@gmail.com',
+            from: 'takyonsm@gmail.com',
             to: email,
             subject: 'Email Verification',
             text: `Your verification code is ${verificationToken}. It will expire in 5 minutes.`
