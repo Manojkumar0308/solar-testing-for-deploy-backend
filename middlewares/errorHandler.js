@@ -6,12 +6,10 @@ const { body, validationResult } = require('express-validator');
 const validator = require('validator');
 const verificationStore = require('../utils/verificationstore'); // Import the verification store
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    service: 'gmail',
     port: 465,
-    secure: true,
-    // port: 587,
-    // secure: false, 
-    requireTLS: true,
+    secure: true, 
+    // requireTLS: true,
     auth: {
         user: process.env.SMTP_MAIL, // Your email address
         pass: process.env.SMTP_PASS   // Your email password or app-specific password
